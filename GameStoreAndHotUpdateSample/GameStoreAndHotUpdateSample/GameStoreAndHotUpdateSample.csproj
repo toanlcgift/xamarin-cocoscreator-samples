@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -12,10 +12,14 @@
 
   <ItemGroup>
     <None Remove="game1.zip" />
+    <None Remove="game2.zip" />
+    <None Remove="game3.zip" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="game1.zip" />
+    <EmbeddedResource Include="game2.zip" />
+    <EmbeddedResource Include="game3.zip" />
   </ItemGroup>
 
   <ItemGroup>
