@@ -91,6 +91,7 @@ window.boot = function () {
             }
             cc.view.enableAutoFullScreen([
                 cc.sys.BROWSER_TYPE_BAIDU,
+                cc.sys.BROWSER_TYPE_BAIDU_APP,
                 cc.sys.BROWSER_TYPE_WECHAT,
                 cc.sys.BROWSER_TYPE_MOBILE_QQ,
                 cc.sys.BROWSER_TYPE_MIUI,
