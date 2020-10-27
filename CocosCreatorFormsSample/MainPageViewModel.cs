@@ -18,6 +18,7 @@ namespace CocosCreatorFormsSample
 
         private void OnExecuteNativeCallCommand(object obj)
         {
+            Device.BeginInvokeOnMainThread(async () => { await App.Current.MainPage.DisplayAlert("Title", "DisplayAlert from Xamarin.Forms", "OK"); });
             CocosCreator.Forms.JSBrigde.EvaluateScript("cc.TestNativeCallJS()");
         }
     }
