@@ -27,7 +27,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameStoreAndHotUpdateSample
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameStoreAndHotUpdateSample.iOS", "GameStoreAndHotUpdateSample\GameStoreAndHotUpdateSample.iOS\GameStoreAndHotUpdateSample.iOS.csproj", "{EFD1953B-A3B9-4FE3-8CBE-4DF0FB3673B3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameStoreAndHotUpdateSample", "GameStoreAndHotUpdateSample\GameStoreAndHotUpdateSample\GameStoreAndHotUpdateSample.csproj", "{5C7B2A7D-6305-4A70-8C09-4BF136ADC26B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameStoreAndHotUpdateSample", "GameStoreAndHotUpdateSample\GameStoreAndHotUpdateSample\GameStoreAndHotUpdateSample.csproj", "{5C7B2A7D-6305-4A70-8C09-4BF136ADC26B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -72,6 +72,7 @@ Global
 		{AFE21BCF-B9F9-4341-9746-0D5EA0AD04A1}.Debug|Any CPU.ActiveCfg = Debug|iPhone
 		{AFE21BCF-B9F9-4341-9746-0D5EA0AD04A1}.Debug|iPhone.ActiveCfg = Debug|iPhone
 		{AFE21BCF-B9F9-4341-9746-0D5EA0AD04A1}.Debug|iPhone.Build.0 = Debug|iPhone
+		{AFE21BCF-B9F9-4341-9746-0D5EA0AD04A1}.Debug|iPhone.Deploy.0 = Debug|iPhone
 		{AFE21BCF-B9F9-4341-9746-0D5EA0AD04A1}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator
 		{AFE21BCF-B9F9-4341-9746-0D5EA0AD04A1}.Debug|iPhoneSimulator.Build.0 = Debug|iPhoneSimulator
 		{AFE21BCF-B9F9-4341-9746-0D5EA0AD04A1}.Release|Any CPU.ActiveCfg = Release|iPhone
