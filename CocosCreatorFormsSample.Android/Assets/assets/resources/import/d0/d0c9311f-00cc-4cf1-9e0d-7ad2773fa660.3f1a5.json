@@ -1,0 +1,1 @@
+[1,0,0,[["cc.TextAsset",["_name","text"],1]],[[0,0,1,3]],[[0,"RichTextImage","## RichText 支持图片功能展示\r\n\r\n1. 设置 RichText 组件中的 imageAtlas\r\n2. 添加`<img src=\"图片名称\">` 标签\r\n"]],0,0,[],[],[]]
