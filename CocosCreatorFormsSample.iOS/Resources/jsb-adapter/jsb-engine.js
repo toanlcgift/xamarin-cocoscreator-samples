@@ -218,19 +218,24 @@ cc.Assembler2D.prototype.updateWorldVerts = function (comp) {
   var vl = local[0],
       vr = local[2],
       vb = local[1],
-      vt = local[3]; // left bottom
+      vt = local[3];
+  var floatsPerVert = this.floatsPerVert;
+  var vertexOffset = 0; // left bottom
 
-  verts[0] = vl;
-  verts[1] = vb; // right bottom
+  verts[vertexOffset] = vl;
+  verts[vertexOffset + 1] = vb;
+  vertexOffset += floatsPerVert; // right bottom
 
-  verts[5] = vr;
-  verts[6] = vb; // left top
+  verts[vertexOffset] = vr;
+  verts[vertexOffset + 1] = vb;
+  vertexOffset += floatsPerVert; // left top
 
-  verts[10] = vl;
-  verts[11] = vt; // right top
+  verts[vertexOffset] = vl;
+  verts[vertexOffset + 1] = vt;
+  vertexOffset += floatsPerVert; // right top
 
-  verts[15] = vr;
-  verts[16] = vt;
+  verts[vertexOffset] = vr;
+  verts[vertexOffset + 1] = vt;
 };
 
 var _updateColor = cc.Assembler2D.prototype.updateColor;
@@ -495,6 +500,27 @@ Object.assign(cc.Label.__assembler__.Bmfont.prototype, {
 "use strict";
 
 (function () {
+  if (!cc.Label.__assembler__.Letter3D) return;
+  var proto = cc.Label.__assembler__.Letter3D.prototype;
+  Object.assign(proto, {
+    updateWorldVerts: function updateWorldVerts(comp) {
+      var local = this._local;
+      var world = this._renderData.vDatas[0];
+      var floatsPerVert = this.floatsPerVert;
+
+      for (var offset = 0, l = world.length; offset < l; offset += floatsPerVert) {
+        world[offset] = local[offset];
+        world[offset + 1] = local[offset + 1];
+        world[offset + 2] = 0;
+      }
+    }
+  });
+})();
+
+},{}],9:[function(require,module,exports){
+"use strict";
+
+(function () {
   if (!cc.Label.__assembler__.TTF3D) return;
   var proto = cc.Label.__assembler__.TTF3D.prototype;
   Object.assign(proto, {
@@ -502,7 +528,7 @@ Object.assign(cc.Label.__assembler__.Bmfont.prototype, {
   });
 })();
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 "use strict";
 
 /****************************************************************************
@@ -535,7 +561,9 @@ require('./3d/bmfont.js');
 
 require('./3d/ttf.js');
 
-},{"./2d/bmfont.js":6,"./3d/bmfont.js":7,"./3d/ttf.js":8}],10:[function(require,module,exports){
+require('./3d/letter.js');
+
+},{"./2d/bmfont.js":6,"./3d/bmfont.js":7,"./3d/letter.js":8,"./3d/ttf.js":9}],11:[function(require,module,exports){
 "use strict";
 
 /****************************************************************************
@@ -629,7 +657,7 @@ cc.js.mixin(cc.Mask.prototype, {
   }
 });
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 "use strict";
 
 (function () {
@@ -673,7 +701,7 @@ cc.js.mixin(cc.Mask.prototype, {
   }, renderer.MeshAssembler.prototype);
 })();
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 "use strict";
 
 var proto = cc.MotionStreak.__assembler__.prototype;
@@ -708,7 +736,7 @@ cc.js.mixin(proto, {
   }
 });
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 "use strict";
 
 (function () {
@@ -777,7 +805,7 @@ cc.js.mixin(proto, {
   }, renderer.Particle3DAssembler.prototype);
 })();
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 "use strict";
 
 /****************************************************************************
@@ -817,7 +845,7 @@ Object.assign(cc.Sprite.__assembler__.Mesh.prototype, {
   }
 });
 
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 "use strict";
 
 /****************************************************************************
@@ -857,7 +885,7 @@ Object.assign(cc.Sprite.__assembler__.RadialFilled.prototype, {
   }
 });
 
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 "use strict";
 
 /****************************************************************************
@@ -900,7 +928,7 @@ proto.initLocal = function () {
   nativeProto.setLocalData.call(this, this._local);
 };
 
-},{}],17:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 "use strict";
 
 /****************************************************************************
@@ -943,7 +971,7 @@ proto.initLocal = function () {
   nativeProto.setLocalData.call(this, this._local);
 };
 
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 "use strict";
 
 /****************************************************************************
@@ -1011,7 +1039,7 @@ Object.assign(cc.Sprite.__assembler__.Tiled.prototype, {
   }
 });
 
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 "use strict";
 
 (function () {
@@ -1022,7 +1050,7 @@ Object.assign(cc.Sprite.__assembler__.Tiled.prototype, {
   });
 })();
 
-},{}],20:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 "use strict";
 
 (function () {
@@ -1045,7 +1073,7 @@ Object.assign(cc.Sprite.__assembler__.Tiled.prototype, {
   });
 })();
 
-},{}],21:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 "use strict";
 
 (function () {
@@ -1066,7 +1094,7 @@ Object.assign(cc.Sprite.__assembler__.Tiled.prototype, {
   });
 })();
 
-},{}],22:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 "use strict";
 
 (function () {
@@ -1078,7 +1106,7 @@ Object.assign(cc.Sprite.__assembler__.Tiled.prototype, {
   });
 })();
 
-},{}],23:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 "use strict";
 
 (function () {
@@ -1090,7 +1118,7 @@ Object.assign(cc.Sprite.__assembler__.Tiled.prototype, {
   });
 })();
 
-},{}],24:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 "use strict";
 
 (function () {
@@ -1141,7 +1169,7 @@ Object.assign(cc.Sprite.__assembler__.Tiled.prototype, {
   });
 })();
 
-},{}],25:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 "use strict";
 
 /****************************************************************************
@@ -1190,7 +1218,7 @@ require('./3d/bar-filled.js');
 
 require('./3d/radial-filled.js');
 
-},{"./2d/mesh.js":14,"./2d/radial-filled.js":15,"./2d/simple.js":16,"./2d/sliced.js":17,"./2d/tiled.js":18,"./3d/bar-filled.js":19,"./3d/mesh.js":20,"./3d/radial-filled.js":21,"./3d/simple.js":22,"./3d/sliced.js":23,"./3d/tiled.js":24}],26:[function(require,module,exports){
+},{"./2d/mesh.js":15,"./2d/radial-filled.js":16,"./2d/simple.js":17,"./2d/sliced.js":18,"./2d/tiled.js":19,"./3d/bar-filled.js":20,"./3d/mesh.js":21,"./3d/radial-filled.js":22,"./3d/simple.js":23,"./3d/sliced.js":24,"./3d/tiled.js":25}],27:[function(require,module,exports){
 "use strict";
 
 /****************************************************************************
@@ -1234,6 +1262,8 @@ require('./jsb-editbox.js');
 require('./jsb-reflection.js');
 
 require('./jsb-assets-manager.js');
+
+require('./jsb-safearea.js');
 
 if (CC_NATIVERENDERER) {
   require('./jsb-effect.js');
@@ -1290,7 +1320,7 @@ if (CC_NATIVERENDERER) {
   });
 }
 
-},{"./assemblers/assembler-2d.js":2,"./assemblers/assembler-3d.js":3,"./assemblers/assembler.js":4,"./assemblers/graphics-assembler.js":5,"./assemblers/label/index.js":9,"./assemblers/mask-assembler.js":10,"./assemblers/mesh-renderer.js":11,"./assemblers/motion-streak.js":12,"./assemblers/particle-3d-assembler.js":13,"./assemblers/sprite/index.js":25,"./jsb-assets-manager.js":27,"./jsb-audio.js":28,"./jsb-dragonbones.js":29,"./jsb-editbox.js":30,"./jsb-effect-variant.js":31,"./jsb-effect.js":32,"./jsb-game.js":33,"./jsb-loader.js":34,"./jsb-particle.js":35,"./jsb-reflection.js":36,"./jsb-skin-mesh.js":37,"./jsb-spine-skeleton.js":38,"./jsb-sys.js":39,"./jsb-tiledmap.js":40,"./jsb-videoplayer.js":42,"./jsb-webview.js":43,"./scene/camera.js":44,"./scene/light.js":45,"./scene/mesh-buffer.js":46,"./scene/node-proxy.js":47,"./scene/node.js":48,"./scene/quad-buffer.js":49,"./scene/render-data.js":50,"./scene/render-flow.js":51}],27:[function(require,module,exports){
+},{"./assemblers/assembler-2d.js":2,"./assemblers/assembler-3d.js":3,"./assemblers/assembler.js":4,"./assemblers/graphics-assembler.js":5,"./assemblers/label/index.js":10,"./assemblers/mask-assembler.js":11,"./assemblers/mesh-renderer.js":12,"./assemblers/motion-streak.js":13,"./assemblers/particle-3d-assembler.js":14,"./assemblers/sprite/index.js":26,"./jsb-assets-manager.js":28,"./jsb-audio.js":29,"./jsb-dragonbones.js":31,"./jsb-editbox.js":32,"./jsb-effect-variant.js":33,"./jsb-effect.js":34,"./jsb-game.js":36,"./jsb-loader.js":37,"./jsb-particle.js":38,"./jsb-reflection.js":39,"./jsb-safearea.js":40,"./jsb-skin-mesh.js":41,"./jsb-spine-skeleton.js":42,"./jsb-sys.js":43,"./jsb-tiledmap.js":44,"./jsb-videoplayer.js":45,"./jsb-webview.js":46,"./scene/camera.js":47,"./scene/light.js":48,"./scene/mesh-buffer.js":49,"./scene/node-proxy.js":50,"./scene/node.js":51,"./scene/quad-buffer.js":52,"./scene/render-data.js":53,"./scene/render-flow.js":54}],28:[function(require,module,exports){
 "use strict";
 
 /*
@@ -1350,7 +1380,7 @@ if (jsb.AssetsManager) {
   jsb.EventAssetsManager.ERROR_DECOMPRESS = 10;
 }
 
-},{}],28:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 "use strict";
 
 /****************************************************************************
@@ -1378,7 +1408,9 @@ if (jsb.AssetsManager) {
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-cc.Audio = function (src) {
+var cacheManager = require('./jsb-cache-manager');
+
+var Audio = cc._Audio = function (src) {
   this.src = src;
   this.volume = 1;
   this.loop = false;
@@ -1403,7 +1435,7 @@ var handleVolume = function handleVolume(volume) {
 
   audioEngine.setMaxWebAudioSize = function () {};
 
-  cc.Audio.State = audioEngine.AudioState;
+  Audio.State = audioEngine.AudioState;
 
   proto.play = function () {
     audioEngine.stop(this.id);
@@ -1477,22 +1509,17 @@ var handleVolume = function handleVolume(volume) {
     }
 
     var audioFilePath;
-    var md5Pipe = cc.loader.md5Pipe;
 
     if (typeof clip === 'string') {
       // backward compatibility since 1.10
       cc.warnID(8401, 'cc.audioEngine', 'cc.AudioClip', 'AudioClip', 'cc.AudioClip', 'audio');
       audioFilePath = clip;
-
-      if (md5Pipe) {
-        audioFilePath = md5Pipe.transformURL(audioFilePath);
-      }
     } else {
       if (clip.loaded) {
         audioFilePath = clip._nativeAsset;
       } else {
         // audio delay loading
-        clip._nativeAsset = audioFilePath = md5Pipe ? md5Pipe.transformURL(clip.nativeUrl) : clip.nativeUrl;
+        clip._nativeAsset = audioFilePath = cacheManager.getCache(clip.nativeUrl) || clip.nativeUrl;
         clip.loaded = true;
       }
     }
@@ -1618,13 +1645,201 @@ var handleVolume = function handleVolume(volume) {
   audioEngine._preload = audioEngine.preload;
 
   audioEngine.preload = function (filePath, callback) {
-    cc.warn('`cc.audioEngine.preload` is deprecated, use `cc.loader.loadRes(url, cc.AudioClip)` instead please.');
+    cc.warn('`cc.audioEngine.preload` is deprecated, use `cc.assetManager.loadRes(url, cc.AudioClip)` instead please.');
 
     audioEngine._preload(filePath, callback);
   };
-})(cc.Audio.prototype, jsb.AudioEngine);
+})(Audio.prototype, jsb.AudioEngine);
 
-},{}],29:[function(require,module,exports){
+},{"./jsb-cache-manager":30}],30:[function(require,module,exports){
+"use strict";
+
+/****************************************************************************
+ Copyright (c) 2019 Xiamen Yaji Software Co., Ltd.
+
+ https://www.cocos.com/
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of cache-manager software and associated engine source code (the "Software"), a limited,
+  worldwide, royalty-free, non-assignable, revocable and non-exclusive license
+ to use Cocos Creator solely to develop games on your target platforms. You shall
+  not use Cocos Creator software for developing other software or tools that's
+  used for developing games. You are not granted to publish, distribute,
+  sublicense, and/or sell copies of Cocos Creator.
+
+ The software or tools in cache-manager License Agreement are licensed, not sold.
+ Xiamen Yaji Software Co., Ltd. reserves all rights not expressly granted to you.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+ ****************************************************************************/
+var _require = require('./jsb-fs-utils'),
+    getUserDataPath = _require.getUserDataPath,
+    readJsonSync = _require.readJsonSync,
+    makeDirSync = _require.makeDirSync,
+    writeFileSync = _require.writeFileSync,
+    writeFile = _require.writeFile,
+    deleteFile = _require.deleteFile,
+    rmdirSync = _require.rmdirSync;
+
+var writeCacheFileList = null;
+var startWrite = false;
+var nextCallbacks = [];
+var callbacks = [];
+var cleaning = false;
+var REGEX = /^\w+:\/\/.*/;
+var cacheManager = {
+  cacheDir: 'gamecaches',
+  cachedFileName: 'cacheList.json',
+  deleteInterval: 500,
+  writeFileInterval: 2000,
+  cachedFiles: null,
+  version: '1.1',
+  getCache: function getCache(url) {
+    this.updateLastTime(url);
+    return this.cachedFiles.has(url) ? "".concat(this.cacheDir, "/").concat(this.cachedFiles.get(url).url) : '';
+  },
+  getTemp: function getTemp(url) {
+    return '';
+  },
+  init: function init() {
+    this.cacheDir = getUserDataPath() + '/' + this.cacheDir;
+    var cacheFilePath = this.cacheDir + '/' + this.cachedFileName;
+    var result = readJsonSync(cacheFilePath);
+
+    if (result instanceof Error || !result.version || result.version !== this.version) {
+      if (!(result instanceof Error)) rmdirSync(this.cacheDir, true);
+      this.cachedFiles = new cc.AssetManager.Cache();
+      makeDirSync(this.cacheDir, true);
+      writeFileSync(cacheFilePath, JSON.stringify({
+        files: this.cachedFiles._map,
+        version: this.version
+      }), 'utf8');
+    } else {
+      this.cachedFiles = new cc.AssetManager.Cache(result.files);
+    }
+  },
+  updateLastTime: function updateLastTime(url) {
+    if (this.cachedFiles.has(url)) {
+      var cache = this.cachedFiles.get(url);
+      cache.lastTime = Date.now();
+    }
+  },
+  _write: function _write() {
+    writeCacheFileList = null;
+    startWrite = true;
+    writeFile(this.cacheDir + '/' + this.cachedFileName, JSON.stringify({
+      files: this.cachedFiles._map,
+      version: this.version
+    }), 'utf8', function () {
+      startWrite = false;
+
+      for (var i = 0, j = callbacks.length; i < j; i++) {
+        callbacks[i]();
+      }
+
+      callbacks.length = 0;
+      callbacks.push.apply(callbacks, nextCallbacks);
+      nextCallbacks.length = 0;
+    });
+  },
+  writeCacheFile: function writeCacheFile(cb) {
+    if (!writeCacheFileList) {
+      writeCacheFileList = setTimeout(this._write.bind(this), this.writeFileInterval);
+
+      if (startWrite === true) {
+        cb && nextCallbacks.push(cb);
+      } else {
+        cb && callbacks.push(cb);
+      }
+    } else {
+      cb && callbacks.push(cb);
+    }
+  },
+  cacheFile: function cacheFile(id, url, cacheBundleRoot) {
+    this.cachedFiles.add(id, {
+      bundle: cacheBundleRoot,
+      url: url,
+      lastTime: Date.now()
+    });
+    this.writeCacheFile();
+  },
+  clearCache: function clearCache() {
+    var _this = this;
+
+    rmdirSync(this.cacheDir, true);
+    this.cachedFiles = new cc.AssetManager.Cache();
+    makeDirSync(this.cacheDir, true);
+    var cacheFilePath = this.cacheDir + '/' + this.cachedFileName;
+    writeFileSync(cacheFilePath, JSON.stringify({
+      files: this.cachedFiles._map,
+      version: this.version
+    }), 'utf8');
+    cc.assetManager.bundles.forEach(function (bundle) {
+      if (REGEX.test(bundle.base)) _this.makeBundleFolder(bundle.name);
+    });
+  },
+  clearLRU: function clearLRU() {
+    var _this2 = this;
+
+    if (cleaning) return;
+    cleaning = true;
+    var caches = [];
+    var self = this;
+    this.cachedFiles.forEach(function (val, key) {
+      if (val.bundle === 'internal') return;
+      caches.push({
+        originUrl: key,
+        url: _this2.getCache(key),
+        lastTime: val.lastTime
+      });
+    });
+    caches.sort(function (a, b) {
+      return a.lastTime - b.lastTime;
+    });
+    caches.length = Math.floor(this.cachedFiles.count / 3);
+    if (caches.length === 0) return;
+
+    for (var i = 0, l = caches.length; i < l; i++) {
+      this.cachedFiles.remove(caches[i].originUrl);
+    }
+
+    this.writeCacheFile(function () {
+      function deferredDelete() {
+        var item = caches.pop();
+        deleteFile(item.url);
+
+        if (caches.length > 0) {
+          setTimeout(deferredDelete, self.deleteInterval);
+        } else {
+          cleaning = false;
+        }
+      }
+
+      setTimeout(deferredDelete, self.deleteInterval);
+    });
+  },
+  removeCache: function removeCache(url) {
+    if (this.cachedFiles.has(url)) {
+      var path = this.getCache(url);
+      this.cachedFiles.remove(url);
+      this.writeCacheFile(function () {
+        deleteFile(path);
+      });
+    }
+  },
+  makeBundleFolder: function makeBundleFolder(bundleName) {
+    makeDirSync(this.cacheDir + '/' + bundleName, true);
+  }
+};
+cc.assetManager.cacheManager = module.exports = cacheManager;
+
+},{"./jsb-fs-utils":35}],31:[function(require,module,exports){
 "use strict";
 
 var _constants = require("constants");
@@ -1653,6 +1868,8 @@ var _constants = require("constants");
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
+var cacheManager = require('./jsb-cache-manager');
+
 (function () {
   if (window.dragonBones === undefined || window.middleware === undefined) return;
   if (dragonBones.DragonBonesAtlasAsset === undefined) return; // dragonbones global time scale.
@@ -1969,7 +2186,7 @@ var _constants = require("constants");
     if (this.dragonBonesJson) {
       filePath = this.dragonBonesJson;
     } else {
-      filePath = cc.loader.md5Pipe ? cc.loader.md5Pipe.transformURL(this.nativeUrl) : this.nativeUrl;
+      filePath = cacheManager.getCache(this.nativeUrl) || this.nativeUrl;
     }
 
     this._factory.parseDragonBonesDataByPath(filePath, armatureKey);
@@ -2065,12 +2282,12 @@ var _constants = require("constants");
         this.animationName = '';
       }
 
+      var oldArmature = this._armature;
+
       if (this._armature) {
         if (!this.isAnimationCached()) {
           this._factory.remove(this._armature);
         }
-
-        this._armature.dispose();
 
         this._armature = null;
       }
@@ -2078,6 +2295,10 @@ var _constants = require("constants");
       this._nativeDisplay = null;
 
       this._refresh();
+
+      if (oldArmature && oldArmature != this._armature) {
+        oldArmature.dispose();
+      }
 
       if (this._armature && !this.isAnimationCached()) {
         this._factory.add(this._armature);
@@ -2396,7 +2617,7 @@ var _constants = require("constants");
   };
 })();
 
-},{"constants":1}],30:[function(require,module,exports){
+},{"./jsb-cache-manager":30,"constants":1}],32:[function(require,module,exports){
 "use strict";
 
 /****************************************************************************
@@ -2498,6 +2719,15 @@ var _constants = require("constants");
 
       this._delegate = delegate;
     },
+    _onResize: function _onResize() {
+      var _this$_getRect = this._getRect(),
+          x = _this$_getRect.x,
+          y = _this$_getRect.y,
+          width = _this$_getRect.width,
+          height = _this$_getRect.height;
+
+      jsb.inputBox.updateRect(x, y, width, height);
+    },
     beginEditing: function beginEditing() {
       var self = this;
       var delegate = this._delegate;
@@ -2548,6 +2778,10 @@ var _constants = require("constants");
       });
       this._editing = true;
       delegate.editBoxEditingDidBegan();
+
+      if (!cc.sys.isMobile) {
+        cc.view.on('canvas-resize', this._onResize, this);
+      }
     },
     endEditing: function endEditing() {
       jsb.inputBox.offConfirm();
@@ -2562,6 +2796,10 @@ var _constants = require("constants");
       jsb.inputBox.hide();
 
       this._delegate.editBoxEditingDidEnded();
+
+      if (!cc.sys.isMobile) {
+        cc.view.off('canvas-resize', this._onResize, this);
+      }
     },
     _getRect: function _getRect() {
       var node = this._delegate.node,
@@ -2570,6 +2808,11 @@ var _constants = require("constants");
       var dpr = cc.view._devicePixelRatio;
       node.getWorldMatrix(worldMat);
       var camera = cc.Camera.findCamera(node);
+
+      if (!camera) {
+        return new cc.Rect();
+      }
+
       camera.getWorldToScreenMatrix2D(cameraMat);
       cc.Mat4.multiply(cameraMat, cameraMat, worldMat);
       var contentSize = node._contentSize;
@@ -2594,7 +2837,7 @@ var _constants = require("constants");
   });
 })();
 
-},{}],31:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 "use strict";
 
 // Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
@@ -2619,7 +2862,7 @@ var _constants = require("constants");
   });
 })();
 
-},{}],32:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 "use strict";
 
 // Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
@@ -2734,7 +2977,245 @@ Object.assign(EffectBase.prototype, {
   }
 });
 
-},{}],33:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
+"use strict";
+
+/****************************************************************************
+ Copyright (c) 2017-2019 Xiamen Yaji Software Co., Ltd.
+
+ https://www.cocos.com/
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of fsUtils software and associated engine source code (the "Software"), a limited,
+  worldwide, royalty-free, non-assignable, revocable and non-exclusive license
+ to use Cocos Creator solely to develop games on your target platforms. You shall
+  not use Cocos Creator software for developing other software or tools that's
+  used for developing games. You are not granted to publish, distribute,
+  sublicense, and/or sell copies of Cocos Creator.
+
+ The software or tools in fsUtils License Agreement are licensed, not sold.
+ Xiamen Yaji Software Co., Ltd. reserves all rights not expressly granted to you.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+ ****************************************************************************/
+var fs = jsb.fileUtils;
+var jsb_downloader = null;
+var downloading = new cc.AssetManager.Cache();
+var tempDir = '';
+var fsUtils = {
+  fs: fs,
+  initJsbDownloader: function initJsbDownloader(jsbDownloaderMaxTasks, jsbDownloaderTimeout) {
+    jsb_downloader = new jsb.Downloader({
+      countOfMaxProcessingTasks: jsbDownloaderMaxTasks || 32,
+      timeoutInSeconds: jsbDownloaderTimeout || 30,
+      tempFileNameSuffix: '.tmp'
+    });
+    tempDir = fsUtils.getUserDataPath() + '/temp';
+    !fs.isDirectoryExist(tempDir) && fs.createDirectory(tempDir);
+    jsb_downloader.setOnFileTaskSuccess(function (task) {
+      if (!downloading.has(task.requestURL)) return;
+
+      var _downloading$remove = downloading.remove(task.requestURL),
+          onComplete = _downloading$remove.onComplete;
+
+      onComplete && onComplete(null, task.storagePath);
+    });
+    jsb_downloader.setOnTaskError(function (task, errorCode, errorCodeInternal, errorStr) {
+      if (!downloading.has(task.requestURL)) return;
+
+      var _downloading$remove2 = downloading.remove(task.requestURL),
+          onComplete = _downloading$remove2.onComplete;
+
+      cc.error("Download file failed: path: ".concat(task.requestURL, " message: ").concat(errorStr, ", ").concat(errorCode));
+      onComplete(new Error(errorStr), null);
+    });
+    jsb_downloader.setOnTaskProgress(function (task, bytesReceived, totalBytesReceived, totalBytesExpected) {
+      if (!downloading.has(task.requestURL)) return;
+
+      var _downloading$get = downloading.get(task.requestURL),
+          onProgress = _downloading$get.onProgress;
+
+      onProgress && onProgress(totalBytesReceived, totalBytesExpected);
+    });
+  },
+  getUserDataPath: function getUserDataPath() {
+    return fs.getWritablePath().replace(/[\/\\]*$/, '');
+  },
+  checkFsValid: function checkFsValid() {
+    if (!fs) {
+      cc.warn('can not get the file system!');
+      return false;
+    }
+
+    return true;
+  },
+  deleteFile: function deleteFile(filePath, onComplete) {
+    var result = fs.removeFile(filePath);
+
+    if (result === true) {
+      onComplete && onComplete(null);
+    } else {
+      cc.warn("Delete file failed: path: ".concat(filePath));
+      onComplete && onComplete(new Error('delete file failed'));
+    }
+  },
+  downloadFile: function downloadFile(remoteUrl, filePath, header, onProgress, onComplete) {
+    downloading.add(remoteUrl, {
+      onProgress: onProgress,
+      onComplete: onComplete
+    });
+    var storagePath = filePath;
+    if (!storagePath) storagePath = tempDir + '/' + performance.now() + cc.path.extname(remoteUrl);
+    jsb_downloader.createDownloadFileTask(remoteUrl, storagePath, header);
+  },
+  saveFile: function saveFile(srcPath, destPath, onComplete) {
+    var err = null;
+    var result = fs.writeDataToFile(fs.getDataFromFile(srcPath), destPath);
+    fs.removeFile(srcPath);
+
+    if (!result) {
+      err = new Error("Save file failed: path: ".concat(srcPath));
+      cc.warn(err.message);
+    }
+
+    onComplete && onComplete(err);
+  },
+  copyFile: function copyFile(srcPath, destPath, onComplete) {
+    var err = null;
+    var result = fs.writeDataToFile(fs.getDataFromFile(srcPath), destPath);
+
+    if (!result) {
+      err = new Error("Copy file failed: path: ".concat(srcPath));
+      cc.warn(err.message);
+    }
+
+    onComplete && onComplete(err);
+  },
+  writeFile: function writeFile(path, data, encoding, onComplete) {
+    var result = null;
+    var err = null;
+
+    if (encoding === 'utf-8' || encoding === 'utf8') {
+      result = fs.writeStringToFile(data, path);
+    } else {
+      result = fs.writeDataToFile(data, path);
+    }
+
+    if (!result) {
+      err = new Error("Write file failed: path: ".concat(path));
+      cc.warn(err.message);
+    }
+
+    onComplete && onComplete(err);
+  },
+  writeFileSync: function writeFileSync(path, data, encoding) {
+    var result = null;
+
+    if (encoding === 'utf-8' || encoding === 'utf8') {
+      result = fs.writeStringToFile(data, path);
+    } else {
+      result = fs.writeDataToFile(data, path);
+    }
+
+    if (!result) {
+      cc.warn("Write file failed: path: ".concat(path));
+      return new Error("Write file failed: path: ".concat(path));
+    }
+  },
+  readFile: function readFile(filePath, encoding, onComplete) {
+    var content = null,
+        err = null;
+
+    if (encoding === 'utf-8' || encoding === 'utf8') {
+      content = fs.getStringFromFile(filePath);
+    } else {
+      content = fs.getDataFromFile(filePath);
+    }
+
+    if (!content) {
+      err = new Error("Read file failed: path: ".concat(filePath));
+      cc.warn(err.message);
+    }
+
+    onComplete && onComplete(err, content);
+  },
+  readDir: function readDir(filePath, onComplete) {
+    var files = null,
+        err = null;
+
+    try {
+      files = fs.listFiles(filePath);
+    } catch (e) {
+      cc.warn("Read dir failed: path: ".concat(filePath, " message: ").concat(e.message));
+      err = new Error(e.message);
+    }
+
+    onComplete && onComplete(err, files);
+  },
+  readText: function readText(filePath, onComplete) {
+    fsUtils.readFile(filePath, 'utf8', onComplete);
+  },
+  readArrayBuffer: function readArrayBuffer(filePath, onComplete) {
+    fsUtils.readFile(filePath, '', onComplete);
+  },
+  readJson: function readJson(filePath, onComplete) {
+    fsUtils.readFile(filePath, 'utf8', function (err, text) {
+      var out = null;
+
+      if (!err) {
+        try {
+          out = JSON.parse(text);
+        } catch (e) {
+          cc.warn("Read json failed: path: ".concat(filePath, " message: ").concat(e.message));
+          err = new Error(e.message);
+        }
+      }
+
+      onComplete && onComplete(err, out);
+    });
+  },
+  readJsonSync: function readJsonSync(path) {
+    try {
+      var str = fs.getStringFromFile(path);
+      return JSON.parse(str);
+    } catch (e) {
+      cc.warn("Read json failed: path: ".concat(path, " message: ").concat(e.message));
+      return new Error(e.message);
+    }
+  },
+  makeDirSync: function makeDirSync(path, recursive) {
+    var result = fs.createDirectory(path);
+
+    if (!result) {
+      cc.warn("Make directory failed: path: ".concat(path));
+      return new Error("Make directory failed: path: ".concat(path));
+    }
+  },
+  rmdirSync: function rmdirSync(dirPath, recursive) {
+    var result = fs.removeDirectory(dirPath);
+
+    if (!result) {
+      cc.warn("rm directory failed: path: ".concat(dirPath));
+      return new Error("rm directory failed: path: ".concat(dirPath));
+    }
+  },
+  exists: function exists(filePath, onComplete) {
+    var result = fs.isFileExist(filePath);
+    onComplete && onComplete(result);
+  },
+  loadSubpackage: function loadSubpackage(name, onProgress, onComplete) {
+    throw new Error('not implement');
+  }
+};
+window.fsUtils = module.exports = fsUtils;
+
+},{}],36:[function(require,module,exports){
 "use strict";
 
 /****************************************************************************
@@ -2767,8 +3248,14 @@ cc.game.restart = function () {
 
   cc.Object._deferredDestroy();
 
+  cc.game.pause();
+
   __restartVM();
 };
+
+jsb.onError(function (location, message, stack) {
+  console.error(location, message, stack);
+});
 
 jsb.onPause = function () {
   cc.game.emit(cc.game.EVENT_HIDE);
@@ -2778,36 +3265,14 @@ jsb.onResume = function () {
   cc.game.emit(cc.game.EVENT_SHOW);
 };
 
-function resize(size) {
-  // size should be the css style
-  size.width /= cc.view._devicePixelRatio;
-  size.height /= cc.view._devicePixelRatio;
-  window.resize(size.width, size.height);
-}
-
 jsb.onResize = function (size) {
-  if (size.width === 0 || size.height === 0) return; // getSafeAreaEdge is asynchronous on iOS, so callback later is required
-
-  if (CC_JSB && cc.sys.os === cc.sys.OS_IOS) {
-    var edges = jsb.Device.getSafeAreaEdge();
-    var hasSafeArea = edges.x > 0 || edges.y > 0 || edges.z > 0 || edges.w > 0;
-
-    if (hasSafeArea) {
-      setTimeout(function () {
-        if (cc.Vec4.strictEquals(edges, jsb.Device.getSafeAreaEdge())) {
-          setTimeout(resize, 200, size);
-        } else {
-          resize(size);
-        }
-      }, 0);
-      return;
-    }
-  }
-
-  resize(size);
+  if (size.width === 0 || size.height === 0) return;
+  size.width /= window.devicePixelRatio;
+  size.height /= window.devicePixelRatio;
+  window.resize(size.width, size.height);
 };
 
-},{}],34:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 /****************************************************************************
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
@@ -2835,88 +3300,142 @@ jsb.onResize = function (size) {
  ****************************************************************************/
 'use strict';
 
-var jsbUtils = require('./jsb-utils');
+var cacheManager = require('./jsb-cache-manager');
 
-function downloadScript(item, callback) {
-  require(item.url);
+var _require = require('./jsb-fs-utils'),
+    downloadFile = _require.downloadFile,
+    readText = _require.readText,
+    readArrayBuffer = _require.readArrayBuffer,
+    readJson = _require.readJson,
+    getUserDataPath = _require.getUserDataPath,
+    initJsbDownloader = _require.initJsbDownloader;
 
-  return null;
-}
+var REGEX = /^\w+:\/\/.*/;
+var downloader = cc.assetManager.downloader;
+var parser = cc.assetManager.parser;
+var presets = cc.assetManager.presets;
+downloader.maxConcurrency = 30;
+downloader.maxRequestsPerFrame = 60;
+presets['preload'].maxConcurrency = 15;
+presets['preload'].maxRequestsPerFrame = 30;
+presets['scene'].maxConcurrency = 32;
+presets['scene'].maxRequestsPerFrame = 64;
+presets['bundle'].maxConcurrency = 32;
+presets['bundle'].maxRequestsPerFrame = 64;
+var suffix = 0;
+var REMOTE_SERVER_ROOT = '';
+var remoteBundles = {};
+var failureMap = {};
+var maxRetryCountFromBreakpoint = 5;
+var loadedScripts = {};
 
-var mediaDownloader = new jsb.Downloader();
-var mediaUrlMap = {}; // key: url, value: { loadingItem, callback }
-
-mediaDownloader.setOnFileTaskSuccess(function (task) {
-  var _mediaUrlMap$task$req = mediaUrlMap[task.requestURL],
-      item = _mediaUrlMap$task$req.item,
-      callback = _mediaUrlMap$task$req.callback;
-
-  if (!(item && callback)) {
-    return;
+function downloadScript(url, options, onComplete) {
+  if (typeof options === 'function') {
+    onComplete = options;
+    options = null;
   }
 
-  item.url = task.storagePath;
-  item.rawUrl = task.storagePath;
-  callback(null, item);
-  delete mediaUrlMap[task.requestURL];
-});
-mediaDownloader.setOnTaskError(function (task, errorCode, errorCodeInternal, errorStr) {
-  var callback = mediaUrlMap[task.requestURL].callback;
-  callback && callback(errorStr, null);
-  delete mediaUrlMap[task.requestURL];
-});
+  if (loadedScripts[url]) return onComplete && onComplete();
+  download(url, function (src, options, onComplete) {
+    window.require(src);
 
-function downloadMedia(item, callback) {
-  if (/^http/.test(item.url)) {
-    var fileName = jsbUtils.murmurhash2_32_gc(item.url) + cc.path.extname(item.url);
-    var storagePath = jsb.fileUtils.getWritablePath() + fileName; // load from local cache
+    loadedScripts[url] = true;
+    onComplete && onComplete(null);
+  }, options, options.onFileProgress, onComplete);
+}
 
-    if (jsb.fileUtils.isFileExist(storagePath)) {
-      item.url = storagePath;
-      item.rawUrl = storagePath;
-      callback && callback(null, item);
-    } // download remote media file
-    else {
-        mediaUrlMap[item.url] = {
-          item: item,
-          callback: callback
-        };
-        mediaDownloader.createDownloadFileTask(item.url, storagePath);
-      } // Don't return anything to use async loading.
+function download(url, func, options, onFileProgress, onComplete) {
+  var result = transformUrl(url, options);
 
+  if (result.inLocal) {
+    func(result.url, options, onComplete);
+  } else if (result.inCache) {
+    cacheManager.updateLastTime(url);
+    func(result.url, options, function (err, data) {
+      if (err) {
+        cacheManager.removeCache(url);
+      }
+
+      onComplete(err, data);
+    });
   } else {
-    return item.url;
+    var time = Date.now();
+    var storagePath = '';
+    var failureRecord = failureMap[url];
+
+    if (failureRecord) {
+      storagePath = failureRecord.storagePath;
+    } else if (options.__cacheBundleRoot__) {
+      storagePath = "".concat(options.__cacheBundleRoot__, "/").concat(time).concat(suffix++).concat(cc.path.extname(url));
+    } else {
+      storagePath = "".concat(time).concat(suffix++).concat(cc.path.extname(url));
+    }
+
+    downloadFile(url, "".concat(cacheManager.cacheDir, "/").concat(storagePath), options.header, onFileProgress, function (err, path) {
+      if (err) {
+        if (failureRecord) {
+          failureRecord.retryCount++;
+
+          if (failureRecord.retryCount >= maxRetryCountFromBreakpoint) {
+            delete failureMap[url];
+          }
+        } else {
+          failureMap[url] = {
+            retryCount: 0,
+            storagePath: storagePath
+          };
+        }
+
+        onComplete(err, null);
+        return;
+      }
+
+      delete failureMap[url];
+      func(path, options, function (err, data) {
+        if (!err) {
+          cacheManager.cacheFile(url, storagePath, options.__cacheBundleRoot__);
+        }
+
+        onComplete(err, data);
+      });
+    });
   }
 }
 
-function loadAudio(item, callback) {
-  var loadByDeserializedAsset = item._owner instanceof cc.AudioClip;
+function transformUrl(url, options) {
+  var inLocal = false;
+  var inCache = false;
 
-  if (loadByDeserializedAsset) {
-    return item.url;
+  if (REGEX.test(url)) {
+    if (options.reload) {
+      return {
+        url: url
+      };
+    } else {
+      var cache = cacheManager.getCache(url);
+
+      if (cache) {
+        inCache = true;
+        url = cache;
+      }
+    }
   } else {
-    var audioClip = new cc.AudioClip(); // obtain user url through nativeUrl
-
-    audioClip._setRawAsset(item.rawUrl, false); // obtain download url through _nativeAsset
-
-
-    audioClip._nativeAsset = item.url;
-    return audioClip;
+    inLocal = true;
   }
-}
 
-function downloadImage(item, callback) {
-  var img = new Image();
-  img.src = item.url;
-
-  img.onload = function (info) {
-    callback(null, img);
+  return {
+    url: url,
+    inLocal: inLocal,
+    inCache: inCache
   };
+}
 
-  img.onerror = function (event) {
-    callback(new Error('load image fail:' + img.src), null);
-  }; // Don't return anything to use async loading.
+function doNothing(content, options, onComplete) {
+  onComplete(null, content);
+}
 
+function downloadAsset(url, options, onComplete) {
+  download(url, doNothing, options, options.onFileProgress, onComplete);
 }
 
 function _getFontFamily(fontHandle) {
@@ -2938,114 +3457,212 @@ function _getFontFamily(fontHandle) {
   return fontFamilyName;
 }
 
-function downloadText(item) {
-  var url = item.url;
-  var result = jsb.fileUtils.getStringFromFile(url);
-
-  if (typeof result === 'string' && result) {
-    return result;
-  } else {
-    return new Error('Download text failed: ' + url);
-  }
+function parseText(url, options, onComplete) {
+  readText(url, onComplete);
 }
 
-function downloadBinary(item) {
-  var url = item.url;
-  var result = jsb.fileUtils.getDataFromFile(url);
-
-  if (result) {
-    return result;
-  } else {
-    return new Error('Download binary file failed: ' + url);
-  }
+function parseJson(url, options, onComplete) {
+  readJson(url, onComplete);
 }
 
-function loadFont(item, callback) {
-  var url = item.url;
+function downloadText(url, options, onComplete) {
+  download(url, parseText, options, options.onFileProgress, onComplete);
+}
 
+function parseArrayBuffer(url, options, onComplete) {
+  readArrayBuffer(url, onComplete);
+}
+
+function downloadJson(url, options, onComplete) {
+  download(url, parseJson, options, options.onFileProgress, onComplete);
+}
+
+function downloadBundle(nameOrUrl, options, onComplete) {
+  var bundleName = cc.path.basename(nameOrUrl);
+  var version = options.version || cc.assetManager.downloader.bundleVers[bundleName];
+  var url;
+
+  if (REGEX.test(nameOrUrl) || nameOrUrl.startsWith(getUserDataPath())) {
+    url = nameOrUrl;
+    cacheManager.makeBundleFolder(bundleName);
+  } else {
+    if (remoteBundles[bundleName]) {
+      url = "".concat(REMOTE_SERVER_ROOT, "remote/").concat(bundleName);
+      cacheManager.makeBundleFolder(bundleName);
+    } else {
+      url = "assets/".concat(bundleName);
+    }
+  }
+
+  var config = "".concat(url, "/config.").concat(version ? version + '.' : '', "json");
+  options.__cacheBundleRoot__ = bundleName;
+  downloadJson(config, options, function (err, response) {
+    if (err) {
+      return onComplete(err, null);
+    }
+
+    var out = response;
+    out && (out.base = url + '/');
+    var js = "".concat(url, "/index.").concat(version ? version + '.' : '').concat(out.encrypted ? 'jsc' : "js");
+    downloadScript(js, options, function (err) {
+      if (err) {
+        return onComplete(err, null);
+      }
+
+      onComplete(err, out);
+    });
+  });
+}
+
+;
+
+function loadFont(url, options, onComplete) {
   var fontFamilyName = _getFontFamily(url);
 
   var fontFace = new FontFace(fontFamilyName, "url('" + url + "')");
   document.fonts.add(fontFace);
   fontFace.load();
   fontFace.loaded.then(function () {
-    callback(null, fontFamilyName);
+    onComplete(null, fontFamilyName);
   }, function () {
     cc.warnID(4933, fontFamilyName);
-    callback(null, fontFamilyName);
+    onComplete(null, fontFamilyName);
   });
 }
 
-function loadCompressedTex(item) {
-  return item.content;
+function parsePlist(url, options, onComplete) {
+  readText(url, function (err, file) {
+    var result = null;
+
+    if (!err) {
+      result = cc.plistParser.parse(file);
+      if (!result) err = new Error('parse failed');
+    }
+
+    onComplete && onComplete(err, result);
+  });
 }
 
-cc.loader.addDownloadHandlers({
+parser.parsePVRTex = downloader.downloadDomImage;
+parser.parsePKMTex = downloader.downloadDomImage;
+downloader.downloadScript = downloadScript;
+downloader.register({
   // JS
-  'js': downloadScript,
-  'jsc': downloadScript,
+  '.js': downloadScript,
+  '.jsc': downloadScript,
   // Images
-  'png': downloadImage,
-  'jpg': downloadImage,
-  'bmp': downloadImage,
-  'jpeg': downloadImage,
-  'gif': downloadImage,
-  'ico': downloadImage,
-  'tiff': downloadImage,
-  'webp': downloadImage,
-  'image': downloadImage,
-  'pvr': downloadImage,
-  'pkm': downloadImage,
+  '.png': downloadAsset,
+  '.jpg': downloadAsset,
+  '.bmp': downloadAsset,
+  '.jpeg': downloadAsset,
+  '.gif': downloadAsset,
+  '.ico': downloadAsset,
+  '.tiff': downloadAsset,
+  '.webp': downloadAsset,
+  '.image': downloadAsset,
+  '.pvr': downloadAsset,
+  '.pkm': downloadAsset,
   // Audio
-  'mp3': downloadMedia,
-  'ogg': downloadMedia,
-  'wav': downloadMedia,
-  'm4a': downloadMedia,
+  '.mp3': downloadAsset,
+  '.ogg': downloadAsset,
+  '.wav': downloadAsset,
+  '.m4a': downloadAsset,
   // Video
-  'mp4': downloadMedia,
-  'avi': downloadMedia,
-  'mov': downloadMedia,
-  'mpg': downloadMedia,
-  'mpeg': downloadMedia,
-  'rm': downloadMedia,
-  'rmvb': downloadMedia,
+  '.mp4': downloadAsset,
+  '.avi': downloadAsset,
+  '.mov': downloadAsset,
+  '.mpg': downloadAsset,
+  '.mpeg': downloadAsset,
+  '.rm': downloadAsset,
+  '.rmvb': downloadAsset,
   // Text
-  'txt': downloadText,
-  'xml': downloadText,
-  'vsh': downloadText,
-  'fsh': downloadText,
-  'atlas': downloadText,
-  'tmx': downloadText,
-  'tsx': downloadText,
-  'json': downloadText,
-  'ExportJson': downloadText,
-  'plist': downloadText,
-  'fnt': downloadText,
-  'binary': downloadBinary,
-  'bin': downloadBinary,
-  'dbbin': downloadBinary,
-  'skel': downloadBinary,
+  '.txt': downloadAsset,
+  '.xml': downloadAsset,
+  '.vsh': downloadAsset,
+  '.fsh': downloadAsset,
+  '.atlas': downloadAsset,
+  '.tmx': downloadAsset,
+  '.tsx': downloadAsset,
+  '.fnt': downloadAsset,
+  '.plist': downloadAsset,
+  '.json': downloadJson,
+  '.ExportJson': downloadAsset,
+  '.binary': downloadAsset,
+  '.bin': downloadAsset,
+  '.dbbin': downloadAsset,
+  '.skel': downloadAsset,
+  // Font
+  '.font': downloadAsset,
+  '.eot': downloadAsset,
+  '.ttf': downloadAsset,
+  '.woff': downloadAsset,
+  '.svg': downloadAsset,
+  '.ttc': downloadAsset,
+  'bundle': downloadBundle,
   'default': downloadText
 });
-cc.loader.addLoadHandlers({
-  // Font
-  'font': loadFont,
-  'eot': loadFont,
-  'ttf': loadFont,
-  'woff': loadFont,
-  'svg': loadFont,
-  'ttc': loadFont,
-  // Audio
-  'mp3': loadAudio,
-  'ogg': loadAudio,
-  'wav': loadAudio,
-  'm4a': loadAudio,
+parser.register({
+  // Images
+  '.png': downloader.downloadDomImage,
+  '.jpg': downloader.downloadDomImage,
+  '.bmp': downloader.downloadDomImage,
+  '.jpeg': downloader.downloadDomImage,
+  '.gif': downloader.downloadDomImage,
+  '.ico': downloader.downloadDomImage,
+  '.tiff': downloader.downloadDomImage,
+  '.webp': downloader.downloadDomImage,
+  '.image': downloader.downloadDomImage,
   // compressed texture
-  'pvr': loadCompressedTex,
-  'pkm': loadCompressedTex
+  '.pvr': downloader.downloadDomImage,
+  '.pkm': downloader.downloadDomImage,
+  '.binary': parseArrayBuffer,
+  '.bin': parseArrayBuffer,
+  '.dbbin': parseArrayBuffer,
+  '.skel': parseArrayBuffer,
+  // Text
+  '.txt': parseText,
+  '.xml': parseText,
+  '.vsh': parseText,
+  '.fsh': parseText,
+  '.atlas': parseText,
+  '.tmx': parseText,
+  '.tsx': parseText,
+  '.fnt': parseText,
+  '.plist': parsePlist,
+  // Font
+  '.font': loadFont,
+  '.eot': loadFont,
+  '.ttf': loadFont,
+  '.woff': loadFont,
+  '.svg': loadFont,
+  '.ttc': loadFont,
+  '.ExportJson': parseJson
 });
+cc.assetManager.transformPipeline.append(function (task) {
+  var input = task.output = task.input;
 
-},{"./jsb-utils":41}],35:[function(require,module,exports){
+  for (var i = 0, l = input.length; i < l; i++) {
+    var item = input[i];
+
+    if (item.config) {
+      item.options.__cacheBundleRoot__ = item.config.name;
+    }
+  }
+});
+var originInit = cc.assetManager.init;
+
+cc.assetManager.init = function (options) {
+  originInit.call(cc.assetManager, options);
+  options.remoteBundles && options.remoteBundles.forEach(function (x) {
+    return remoteBundles[x] = true;
+  });
+  REMOTE_SERVER_ROOT = options.server || '';
+  if (REMOTE_SERVER_ROOT && !REMOTE_SERVER_ROOT.endsWith('/')) REMOTE_SERVER_ROOT += '/';
+  initJsbDownloader(options.jsbDownloaderMaxTasks, options.jsbDownloaderTimeout);
+  cacheManager.init();
+};
+
+},{"./jsb-cache-manager":30,"./jsb-fs-utils":35}],38:[function(require,module,exports){
 "use strict";
 
 /****************************************************************************
@@ -3300,7 +3917,9 @@ cc.loader.addLoadHandlers({
     _updateMaterial.call(this);
 
     var material = this._materials[0];
-    material && this._simulator.setEffect(material.effect._nativeObj);
+    material && this._simulator.setEffect(material.effect._nativeObj); // upload hash value to native
+
+    material && material.getHash();
   };
 
   var _initWithDictionary = PSProto._initWithDictionary;
@@ -3320,7 +3939,7 @@ cc.loader.addLoadHandlers({
   };
 })();
 
-},{}],36:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 "use strict";
 
 /****************************************************************************
@@ -3355,7 +3974,42 @@ if (window.JavascriptJavaBridge && cc.sys.os == cc.sys.OS_ANDROID) {
   jsb.reflection = new JavaScriptObjCBridge();
 }
 
-},{}],37:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
+"use strict";
+
+var SafeArea = cc.SafeArea;
+
+if (SafeArea) {
+  var _onEnable = SafeArea.prototype.onEnable;
+  var _onDisable = SafeArea.prototype.onDisable;
+  Object.assign(SafeArea.prototype, {
+    onEnable: function onEnable() {
+      _onEnable.call(this);
+
+      this._adaptSafeAreaChangeWithThis = this.adaptSafeAreaChange.bind(this);
+      this._updateAreaWithThis = this.adaptSafeAreaChange.bind(this);
+      window.addEventListener('orientationchange', this._adaptSafeAreaChangeWithThis);
+      window.addEventListener('safearea-change', this._updateAreaWithThis);
+    },
+    onDisable: function onDisable() {
+      _onDisable.call(this);
+
+      window.removeEventListener('orientationchange', this._adaptSafeAreaChangeWithThis);
+      window.removeEventListener('safearea-change', this._updateAreaWithThis);
+    },
+    adaptSafeAreaChange: function adaptSafeAreaChange() {
+      var _this = this;
+
+      if (CC_JSB && (cc.sys.os === cc.sys.OS_IOS || cc.sys.os === cc.sys.OS_ANDROID)) {
+        setTimeout(function () {
+          _this.updateArea();
+        }, 200);
+      }
+    }
+  });
+}
+
+},{}],41:[function(require,module,exports){
 "use strict";
 
 (function () {
@@ -3369,7 +4023,7 @@ if (window.JavascriptJavaBridge && cc.sys.os == cc.sys.OS_ANDROID) {
   });
 })();
 
-},{}],38:[function(require,module,exports){
+},{}],42:[function(require,module,exports){
 "use strict";
 
 /****************************************************************************
@@ -3396,6 +4050,8 @@ if (window.JavascriptJavaBridge && cc.sys.os == cc.sys.OS_ANDROID) {
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
+var cacheManager = require('./jsb-cache-manager');
+
 (function () {
   if (window.sp === undefined || window.spine === undefined || window.middleware === undefined) return;
   sp.VertexEffectDelegate = spine.VertexEffectDelegate;
@@ -3478,6 +4134,8 @@ if (window.JavascriptJavaBridge && cc.sys.os == cc.sys.OS_ANDROID) {
 
     if (skeletonCache) {
       this._skeletonCache = skeletonCache;
+      this.width = this._skeletonCache.getWidth();
+      this.height = this._skeletonCache.getHeight();
       return;
     }
 
@@ -3520,10 +4178,15 @@ if (window.JavascriptJavaBridge && cc.sys.os == cc.sys.OS_ANDROID) {
     if (this.skeletonJsonStr) {
       filePath = this.skeletonJsonStr;
     } else {
-      filePath = cc.loader.md5Pipe ? cc.loader.md5Pipe.transformURL(this.nativeUrl) : this.nativeUrl;
+      filePath = cacheManager.getCache(this.nativeUrl) || this.nativeUrl;
     }
 
     this._skeletonCache = spine.initSkeletonData(uuid, filePath, atlasText, jsbTextures, this.scale);
+
+    if (this._skeletonCache) {
+      this.width = this._skeletonCache.getWidth();
+      this.height = this._skeletonCache.getHeight();
+    }
   };
 
   skeletonDataProto.recordTexture = function (texture) {
@@ -4251,7 +4914,7 @@ if (window.JavascriptJavaBridge && cc.sys.os == cc.sys.OS_ANDROID) {
   };
 })();
 
-},{}],39:[function(require,module,exports){
+},{"./jsb-cache-manager":30}],43:[function(require,module,exports){
 /****************************************************************************
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
@@ -4310,7 +4973,7 @@ sys.getSafeAreaRect = function () {
   return cc.rect(leftBottom.x, leftBottom.y, rightTop.x - leftBottom.x, rightTop.y - leftBottom.y);
 };
 
-},{}],40:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 "use strict";
 
 /****************************************************************************
@@ -4362,20 +5025,15 @@ sys.getSafeAreaRect = function () {
       var proxy = node._proxy;
       proxy && proxy.enableVisit(true);
     }
-  }; // override _activateMaterial to upload hash value to native
+  }; // override _buildMaterial to upload hash value to native
 
 
-  var _activateMaterial = TiledLayer._activateMaterial;
+  var _buildMaterial = TiledLayer._buildMaterial;
 
-  TiledLayer._activateMaterial = function () {
-    _activateMaterial.call(this);
+  TiledLayer._buildMaterial = function (tilesetIdx) {
+    var material = _buildMaterial.call(this, tilesetIdx);
 
-    var materials = this._materials;
-
-    for (var i = 0; i < materials.length; i++) {
-      var m = materials[i];
-      if (m) m.getHash();
-    }
+    if (material) material.getHash();
   }; // tiledmap buffer
 
 
@@ -4510,66 +5168,7 @@ sys.getSafeAreaRect = function () {
   }, renderer.TiledMapAssembler.prototype);
 })();
 
-},{}],41:[function(require,module,exports){
-"use strict";
-
-var jsbUtils = {
-  /****************************************************************************
-  Copyright (c) 2011 Gary Court
-  
-  http://github.com/garycourt/murmurhash-js
-    Permission is hereby granted, free of charge, to any person obtaining a copy 
-  of this software and associated documentation files (the "Software"), to deal 
-  in the Software without restriction, including without limitation the rights 
-  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
-  copies of the Software, and to permit persons to whom the Software is furnished 
-  to do so, subject to the following conditions:
-    The above copyright notice and this permission notice shall be included in all 
-  copies or substantial portions of the Software.
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
-  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-  ****************************************************************************/
-  murmurhash2_32_gc: function murmurhash2_32_gc(str, seed) {
-    var l = str.length,
-        h = seed ^ l,
-        i = 0,
-        k;
-
-    while (l >= 4) {
-      k = str.charCodeAt(i) & 0xff | (str.charCodeAt(++i) & 0xff) << 8 | (str.charCodeAt(++i) & 0xff) << 16 | (str.charCodeAt(++i) & 0xff) << 24;
-      k = (k & 0xffff) * 0x5bd1e995 + (((k >>> 16) * 0x5bd1e995 & 0xffff) << 16);
-      k ^= k >>> 24;
-      k = (k & 0xffff) * 0x5bd1e995 + (((k >>> 16) * 0x5bd1e995 & 0xffff) << 16);
-      h = (h & 0xffff) * 0x5bd1e995 + (((h >>> 16) * 0x5bd1e995 & 0xffff) << 16) ^ k;
-      l -= 4;
-      ++i;
-    }
-
-    switch (l) {
-      case 3:
-        h ^= (str.charCodeAt(i + 2) & 0xff) << 16;
-
-      case 2:
-        h ^= (str.charCodeAt(i + 1) & 0xff) << 8;
-
-      case 1:
-        h ^= str.charCodeAt(i) & 0xff;
-        h = (h & 0xffff) * 0x5bd1e995 + (((h >>> 16) * 0x5bd1e995 & 0xffff) << 16);
-    }
-
-    h ^= h >>> 13;
-    h = (h & 0xffff) * 0x5bd1e995 + (((h >>> 16) * 0x5bd1e995 & 0xffff) << 16);
-    h ^= h >>> 15;
-    return h >>> 0;
-  }
-};
-module.exports = jsbUtils;
-
-},{}],42:[function(require,module,exports){
+},{}],45:[function(require,module,exports){
 "use strict";
 
 /****************************************************************************
@@ -4627,6 +5226,10 @@ module.exports = jsbUtils;
       self._loadedmeta = true;
 
       self._dispatchEvent(_impl.EventType.META_LOADED);
+
+      if (self._playing) {
+        self._video.play();
+      }
     };
 
     cbs.ended = function () {
@@ -4807,12 +5410,6 @@ module.exports = jsbUtils;
 
       video.addEventListener(_impl._polyfill.event, cb);
     }
-
-    if (_impl._polyfill.autoplayAfterOperation && this.isPlaying()) {
-      setTimeout(function () {
-        video.play();
-      }, 20);
-    }
   };
 
   _p.isPlaying = function () {
@@ -4915,6 +5512,13 @@ module.exports = jsbUtils;
 
   _p.updateMatrix = function (node) {
     if (!this._video || !this._visible) return;
+
+    var camera = cc.Camera.findCamera(node)._camera;
+
+    if (!camera) {
+      return;
+    }
+
     node.getWorldMatrix(_worldMat);
 
     if (!this._forceUpdate && this._m00 === _worldMat.m[0] && this._m01 === _worldMat.m[1] && this._m04 === _worldMat.m[4] && this._m05 === _worldMat.m[5] && this._m12 === _worldMat.m[12] && this._m13 === _worldMat.m[13] && this._w === node._contentSize.width && this._h === node._contentSize.height) {
@@ -4930,9 +5534,6 @@ module.exports = jsbUtils;
     this._m13 = _worldMat.m[13];
     this._w = node._contentSize.width;
     this._h = node._contentSize.height;
-
-    var camera = cc.Camera.findCamera(node)._camera;
-
     var canvas_width = cc.game.canvas.width;
     var canvas_height = cc.game.canvas.height;
     var ap = node._anchorPoint; // Vectors in node space
@@ -4988,7 +5589,7 @@ module.exports = jsbUtils;
   });
 })();
 
-},{}],43:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 "use strict";
 
 /****************************************************************************
@@ -5299,6 +5900,13 @@ module.exports = jsbUtils;
 
   _p.updateMatrix = function (node) {
     if (!this._iframe || !this._visible) return;
+
+    var camera = cc.Camera.findCamera(node)._camera;
+
+    if (!camera) {
+      return;
+    }
+
     node.getWorldMatrix(_worldMat);
 
     if (this._m00 === _worldMat.m[0] && this._m01 === _worldMat.m[1] && this._m04 === _worldMat.m[4] && this._m05 === _worldMat.m[5] && this._m12 === _worldMat.m[12] && this._m13 === _worldMat.m[13] && this._w === node._contentSize.width && this._h === node._contentSize.height) {
@@ -5314,9 +5922,6 @@ module.exports = jsbUtils;
     this._m13 = _worldMat.m[13];
     this._w = node._contentSize.width;
     this._h = node._contentSize.height;
-
-    var camera = cc.Camera.findCamera(node)._camera;
-
     var canvas_width = cc.game.canvas.width;
     var canvas_height = cc.game.canvas.height;
     var ap = node._anchorPoint; // Vectors in node space
@@ -5336,7 +5941,7 @@ module.exports = jsbUtils;
   };
 })();
 
-},{}],44:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 "use strict";
 
 /****************************************************************************
@@ -5373,7 +5978,7 @@ cc.js.mixin(nativeCameraProto, {
   }
 });
 
-},{}],45:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 "use strict";
 
 /****************************************************************************
@@ -5410,7 +6015,7 @@ cc.js.mixin(nativeLightProto, {
   }
 });
 
-},{}],46:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 "use strict";
 
 /****************************************************************************
@@ -5590,7 +6195,7 @@ cc.js.mixin(nativeLightProto, {
   };
 })();
 
-},{}],47:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 "use strict";
 
 /****************************************************************************
@@ -5710,7 +6315,7 @@ cc.js.mixin(renderer.NodeProxy.prototype, {
   }
 });
 
-},{}],48:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 /****************************************************************************
  Copyright (c) 2018 Xiamen Yaji Software Co., Ltd.
 
@@ -5775,7 +6380,7 @@ cc.PrivateNode.prototype._posDirty = function (sendEvent) {
   }
 };
 
-},{}],49:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 "use strict";
 
 /****************************************************************************
@@ -5838,7 +6443,7 @@ cc.PrivateNode.prototype._posDirty = function (sendEvent) {
   };
 })();
 
-},{}],50:[function(require,module,exports){
+},{}],53:[function(require,module,exports){
 "use strict";
 
 var proto = cc.RenderData.prototype;
@@ -5873,7 +6478,7 @@ proto.updateMeshRange = function (verticesCount, indicesCount) {
   this._nativeAssembler.updateIndicesRange(0, 0, indicesCount);
 };
 
-},{}],51:[function(require,module,exports){
+},{}],54:[function(require,module,exports){
 "use strict";
 
 /****************************************************************************
@@ -5909,7 +6514,8 @@ var _dirtyWaiting = [];
 var _rendering = false;
 var director = cc.director;
 
-RenderFlow.render = function (scene) {
+RenderFlow.render = function (scene, dt) {
+  var camera = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
   _rendering = true;
   RenderFlow.validateRenderers();
 
@@ -5934,12 +6540,17 @@ RenderFlow.render = function (scene) {
   }
 
   _dirtyTargets.length = 0;
+  dt = dt || 0;
 
-  this._nativeFlow.render(scene._proxy, director._deltaTime);
+  this._nativeFlow.render(scene._proxy, dt, camera);
 
   _dirtyTargets = _dirtyWaiting.slice(0);
   _dirtyWaiting.length = 0;
   _rendering = false;
+};
+
+RenderFlow.renderCamera = function (camera, scene) {
+  RenderFlow.render(scene, 0, camera);
 };
 
 RenderFlow.init = function (nativeFlow) {
@@ -5959,4 +6570,4 @@ RenderFlow.register = function (target) {
   target._inJsbDirtyList = true;
 };
 
-},{}]},{},[26]);
+},{}]},{},[27]);

@@ -1,0 +1,1 @@
+[1,0,0,[["cc.AnimationClip",["_name","_duration","events","curveData"],-1]],[[0,0,1,2,3,5]],[[0,"step_3",1,[{"frame":1,"func":"onNextAnimation","params":[4]}],{"props":{"position":[{"frame":0,"curve":"quartOut","value":[386,-236]},{"frame":0.9833333333333333,"value":[-360,-230]}]}}]],0,0,[],[],[]]
