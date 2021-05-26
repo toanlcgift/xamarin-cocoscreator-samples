@@ -60,7 +60,7 @@ namespace CocosCreatorSample.Droid
         public override Cocos2dxGLSurfaceView OnCreateView()
         {
             Cocos2dxGLSurfaceView glSurfaceView = new Cocos2dxGLSurfaceView(this);
-            glSurfaceView.SetEGLConfigChooser(8, 8, 8, 8, 16, 0);
+            glSurfaceView.SetEGLConfigChooser(5, 6, 5, 0, 16, 8);
             return glSurfaceView;
         }
 
